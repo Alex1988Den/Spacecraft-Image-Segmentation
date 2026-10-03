@@ -1,95 +1,176 @@
-# Проект Сегментация Космических Аппаратов
-
-Этот проект посвящен задаче сегментации изображений космических аппаратов, в рамках которой используются как реальные, так и синтетические данные спутников и космических станций. Основная цель — создание модели для сегментации различных частей космического аппарата, таких как корпус, солнечные панели и антенны.
-
-## Задача
-
-Задача заключается в обучении модели сегментации, которая будет корректно идентифицировать и сегментировать различные части космического аппарата на изображениях. Модель должна достигать высокого качества предсказаний, оцениваемого через метрики, такие как Mean Intersection over Union (mIoU).
-
-## Описание данных
-
-Датасет состоит из **3,116 изображений** космических аппаратов с масками:
-
-- **Размер масок**: 1280x720.
-- **Цвета масок**:
-  - **Зеленый**: корпус аппарата.
-  - **Красный**: солнечные панели.
-  - **Синий**: антенны.
-  
-Обучающая выборка включает 403 точные маски (индексы 0-402) и 2,114 грубых масок (индексы 1003-3116). Валидационная выборка содержит 600 изображений с точными масками (индексы 403-1002).
-
-## Метрики
-
-- **Mean IoU (mIoU)**: метрика, использующаяся для оценки качества сегментации. Модель должна достигать **mIoU > 0.70** на валидационной выборке.
-- **Потери (Loss)**: оцениваются на каждой эпохе. Снижение потерь на протяжении обучения является индикатором улучшения работы модели.
-
-## Архитектура модели
-
-Для задачи сегментации была использована модель с архитектурой, подходящей для многоклассовой сегментации. Модель обучается с использованием функции потерь, которая минимизирует различие между предсказанными и истинными масками.
-
-## Результаты обучения
-
-Процесс обучения модели на датасете привел к следующим результатам на валидационной выборке:
-
-- **Эпохи 1-5**: Значительное улучшение потерь и увеличение качества предсказаний.
-- **Эпохи 6-10**: Потери продолжают снижаться, достигнуты хорошие результаты по метрике mIoU.
-- **Эпохи 11-20**: Модель стабилизировалась, и на последней эпохе достигнут показатель **Mean IoU = 0.9312**.
-
-## Визуализация результатов
-
-Процесс визуализации результатов обучения модели включает отображение оригинального изображения, предсказанной маски и истинной маски, что позволяет наглядно оценить качество сегментации.
-
-Пример визуализации:
-
-- Изображение: исходное изображение космического аппарата.
-- Предсказанная маска: результат работы модели, наложенный на изображение.
-- Истинная маска: реальная маска, которая использовалась для обучения.
-
-# Контрибьюторы
-
-Для вопросов и предложений вы можете связаться со мной через GitHub или по электронной почте: aleksandr.denissov@brave.ee
-
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-
-def plot_segmentation_result(image, pred_mask, true_mask):
-    plt.figure(figsize=(12, 6))
-
-    plt.subplot(1, 3, 1)
-    plt.title("Original Image")
-    plt.imshow(image)
-
-    plt.subplot(1, 3, 2)
-    plt.title("Predicted Mask")
-    plt.imshow(pred_mask, cmap='jet', alpha=0.5)
-
-    plt.subplot(1, 3, 3)
-    plt.title("True Mask")
-    plt.imshow(true_mask, cmap='jet', alpha=0.5)
-
-    plt.show()
-
-# Пример использования
-image = np.random.rand(256, 256, 3)  # Пример изображения
-pred_mask = np.random.randint(0, 2, (256, 256))  # Пример предсказанной маски
-true_mask = np.random.randint(0, 2, (256, 256))  # Пример истинной маски
-
-plot_segmentation_result(image, pred_mask, true_mask)
-
-# Установка и запуск
-
-git clone https://github.com/your-username/spacecraft-segmentation.git
-cd spacecraft-segmentation
-
-# Установите необходимые зависимости:
-
+# 🚀 Spacecraft Image Segmentation
+ 
+## 📌 Project Overview
+ 
+This project focuses on semantic image segmentation of spacecraft components using deep learning techniques.
+ 
+The goal is to build a computer vision model capable of accurately identifying and segmenting different spacecraft parts, including the main body, solar panels, and antennas, using both real and synthetic satellite imagery.
+ 
+---
+ 
+## 🎯 Project Objectives
+ 
+- Perform semantic image segmentation
+- Train a deep learning model on spacecraft imagery
+- Segment spacecraft components with pixel-level accuracy
+- Evaluate segmentation quality using mIoU
+- Compare predicted masks with ground-truth masks
+ 
+---
+ 
+## 📊 Dataset
+ 
+The dataset contains **3,116 spacecraft images** with segmentation masks.
+ 
+### Mask Resolution
+ 
+- 1280 × 720 pixels
+ 
+### Segmentation Classes
+ 
+🟩 Green — Spacecraft Body
+ 
+🟥 Red — Solar Panels
+ 
+🟦 Blue — Antennas
+ 
+### Data Split
+ 
+- Training Set:
+- 403 precise masks
+- 2,114 coarse masks
+ 
+- Validation Set:
+- 600 precise masks
+ 
+---
+ 
+## 🧠 Deep Learning Approach
+ 
+The project uses a semantic segmentation architecture designed for multi-class segmentation tasks.
+ 
+The model learns to assign each image pixel to one of the predefined spacecraft component classes.
+ 
+---
+ 
+## 📏 Evaluation Metrics
+ 
+### Mean Intersection over Union (mIoU)
+ 
+Primary metric used to evaluate segmentation quality.
+ 
+Project target:
+ 
+```text
+mIoU > 0.70
+```
+ 
+### Training Loss
+ 
+Training and validation loss values were monitored during model optimization.
+ 
+---
+ 
+## 🔍 Project Workflow
+ 
+### 1. Data Preparation
+ 
+- Dataset loading
+- Mask preprocessing
+- Image augmentation
+ 
+### 2. Model Training
+ 
+- Multi-class segmentation training
+- Loss optimization
+- Validation monitoring
+ 
+### 3. Model Evaluation
+ 
+- mIoU calculation
+- Prediction quality assessment
+ 
+### 4. Result Visualization
+ 
+- Original image visualization
+- Predicted mask visualization
+- Ground-truth mask comparison
+ 
+---
+ 
+## 📈 Results
+ 
+The model achieved:
+ 
+### ✅ Mean IoU = 0.9312
+ 
+Training observations:
+ 
+- Stable convergence during training
+- Continuous reduction in loss values
+- High-quality segmentation masks
+- Accurate detection of spacecraft components
+ 
+---
+ 
+## 🛠 Technologies
+ 
+- Python
+- PyTorch
+- NumPy
+- OpenCV
+- Matplotlib
+- Jupyter Notebook
+ 
+---
+ 
+## 🚀 Installation
+ 
+Clone the repository:
+ 
+```bash
+git clone https://github.com/Alex1988Den/Spacecraft-Image-Segmentation.git
+cd Spacecraft-Image-Segmentation
+```
+ 
+Install dependencies:
+ 
+```bash
 pip install -r requirements.txt
-
-# Запустите обучение модели:
-
-python train.py --epochs 20 --batch-size 16 --lr 0.001
-
-# Визуализируйте результаты:
-
-python visualize.py --image_path path_to_image --pred_mask_path path_to_pred_mask --true_mask_path path_to_true_mask
+```
+ 
+Launch Jupyter Notebook:
+ 
+```bash
+jupyter notebook
+```
+ 
+Open:
+ 
+```text
+Spacecraft_Image_Segmentation.ipynb
+```
+ 
+and run all cells.
+ 
+---
+ 
+## 💡 Applications
+ 
+- Satellite Image Analysis
+- Aerospace Computer Vision
+- Spacecraft Component Detection
+- Remote Sensing
+- Industrial Image Segmentation
+ 
+---
+ 
+## 👨‍💻 Author
+ 
+Developed by **Aleksandr Denissov**
+ 
+📧 Email: aleksandr.denissov@brave.ee
+ 
+---
+ 
+⭐ If you find this project useful, feel free to leave a star on GitHub.
